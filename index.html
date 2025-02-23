@@ -13,6 +13,7 @@
 
 
         <script>
+            // STEP 1: Get the computer's choice. We want to have a value the human player plays against
             function getComputerChoice() {
                 let computerChoice = Math.floor(Math.random() * 3) + 1; // generates 1, 2, or 3
                 switch (computerChoice) { // assign the random values with either rock, paper or scissors
@@ -26,14 +27,17 @@
             } 
             console.log(getComputerChoice()); // test the function by calling it and making sure it returns one of the three options
 
+            // STEP 2: Get the human choice by prompting the user for their input using prompt();
             function getHumanChoice() {
                 let humanChoice = prompt("Rock, paper or scissors?");
                 return humanChoice;
             }
 
-            let humanScore = 0;
+            let humanScore = 0; // initialize variables storing the score
             let computerScore = 0;
 
+
+            // STEP 3: Play 1 round by getting both the computer choice and human choice
             function playRound() {
             let humanChoice = getHumanChoice(); // Gets input once
 
@@ -68,8 +72,28 @@
             console.log(`Score: Human ${humanScore} - Computer ${computerScore}`);
             }
 
-            // Call the function once
-            playRound();
+            // STEP 4: Put it all together so that the game plays 5 rounds; Right now this is NOT happening; Now it plays as long as the scores are total 5, while tie does not equal score. Need to use FOR loop
+            function playGame() {
+
+                humanScore = 0;
+                computerScore = 0;
+
+                for (let i = 0; i < 5; i++) {  // Runs 5 times: i = 0,1,2,3,4
+                console.log(`Round ${i + 1}:`);  // Start from "Round 1"
+                playRound();
+                }
+
+                console.log("Game Over!");
+                if (humanScore > computerScore) {
+                    console.log("You won the game! 🎉");
+                } else if (humanScore < computerScore) {
+                    console.log("Computer won the game! 🤖");
+                } else {
+                    console.log("It's a tie! 😐");
+                }
+            }
+
+            playGame();
 
         </script>
     </body>
