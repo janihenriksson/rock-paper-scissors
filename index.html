@@ -1,100 +1,104 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <title>Rock Paper Scissors!</title>
-        <meta charset="utf-8">
-      <!--  <link rel="stylesheet" href="styles.css"> -->
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rock Paper Scissors!</title>
+</head>
+<body>
+    <h1>Rock-Paper-Scissors</h1>
+    <p>Click on a button to play:</p>
 
-    </head>
+    <!-- Buttons for playing -->
+    <button type="button" id="rock">Rock</button>
+    <button type="button" id="paper">Paper</button>
+    <button type="button" id="scissors">Scissors</button>
 
-    <body>
-        <h1>A rock-paper-scissors game that runs on the console!</h1>
+    <!-- Results display -->
+    <div id="results">
+        <p>Human chose: <span id="human-choice">-</span></p>
+        <p>Computer chose: <span id="computer-choice">-</span></p>
+        <p id="round-result">Let's Play!</p>
+        <p>Human score: <span id="human-score">0</span></p>
+        <p>Computer score: <span id="computer-score">0</span></p>
+    </div>
 
+    <script>
+        // Select the buttons
+        const rock = document.querySelector("#rock");
+        const paper = document.querySelector("#paper");
+        const scissors = document.querySelector("#scissors");
 
+        // Add event listeners to the buttons
+        rock.addEventListener("click", () => playRound("rock"));
+        paper.addEventListener("click", () => playRound("paper"));
+        scissors.addEventListener("click", () => playRound("scissors"));
 
-        <script>
-            // STEP 1: Get the computer's choice. We want to have a value the human player plays against
-            function getComputerChoice() {
-                let computerChoice = Math.floor(Math.random() * 3) + 1; // generates 1, 2, or 3
-                switch (computerChoice) { // assign the random values with either rock, paper or scissors
-                    case 1: 
-                        return "rock";
-                    case 2:
-                        return "paper";
-                    case 3:
-                        return "scissors";
-                }
-            } 
-            console.log(getComputerChoice()); // test the function by calling it and making sure it returns one of the three options
+        // Variables to track scores
+        let humanScore = 0;
+        let computerScore = 0;
 
-            // STEP 2: Get the human choice by prompting the user for their input using prompt();
-            function getHumanChoice() {
-                let humanChoice = prompt("Rock, paper or scissors?");
-                return humanChoice;
-            }
+        // Function to get computer's choice
+        function getComputerChoice() {
+            const choices = ["rock", "paper", "scissors"];
+            const randomIndex = Math.floor(Math.random() * choices.length);
+            return choices[randomIndex];
+        }
 
-            let humanScore = 0; // initialize variables storing the score
-            let computerScore = 0;
-
-
-            // STEP 3: Play 1 round by getting both the computer choice and human choice
-            function playRound() {
-            let humanChoice = getHumanChoice(); // Gets input once
-
-            // Convert input to lowercase and remove extra spaces
-            humanChoice = humanChoice.toLowerCase().trim();
-    
-            // Validate user input
-            if (!["rock", "paper", "scissors"].includes(humanChoice)) {
-            console.log("Invalid choice! Please enter 'rock', 'paper', or 'scissors'.");
-            return;
-            }
-
-            let computerChoice = getComputerChoice(); // Gets the computer's choice
-
-            console.log(`Human chose: ${humanChoice}`);
-            console.log(`Computer chose: ${computerChoice}`);
+        // Function to play one round
+        function playRound(humanChoice) {
+            let computerChoice = getComputerChoice();
+            let resultMessage = "";
 
             if (humanChoice === computerChoice) {
-            console.log("It's a tie!");
+                resultMessage = "It's a tie!";
             } else if (
-            (humanChoice === "rock" && computerChoice === "scissors") ||
-            (humanChoice === "paper" && computerChoice === "rock") ||
-            (humanChoice === "scissors" && computerChoice === "paper")
+                (humanChoice === "rock" && computerChoice === "scissors") ||
+                (humanChoice === "paper" && computerChoice === "rock") ||
+                (humanChoice === "scissors" && computerChoice === "paper")
             ) {
-            console.log("You win this round!");
-            humanScore++;
+                resultMessage = "You win this round!";
+                humanScore++;
             } else {
-            console.log("Computer wins this round!");
-            computerScore++;
+                resultMessage = "Computer wins this round!";
+                computerScore++;
             }
 
-            console.log(`Score: Human ${humanScore} - Computer ${computerScore}`);
+            // Update results on the UI
+            updateResults(humanChoice, computerChoice, resultMessage);
+        }
+
+        // Function to update the UI
+        function updateResults(humanChoice, computerChoice, resultMessage) {
+            document.querySelector("#human-choice").textContent = humanChoice;
+            document.querySelector("#computer-choice").textContent = computerChoice;
+            document.querySelector("#round-result").textContent = resultMessage;
+            document.querySelector("#human-score").textContent = humanScore;
+            document.querySelector("#computer-score").textContent = computerScore;
+
+            // Check for a winner
+            if (humanScore === 5) {
+                document.querySelector("#round-result").textContent = "You win the game!";
+                resetGame();
+            } else if (computerScore === 5) {
+                document.querySelector("#round-result").textContent = "Computer wins the game!";
+                resetGame();
             }
+        }
 
-            // STEP 4: Put it all together so that the game plays 5 rounds
-
-                humanScore = 0;
-                computerScore = 0;
-
-                for (let i = 0; i < 5; i++) {  // Runs 5 times: i = 0,1,2,3,4
-                console.log(`Round ${i + 1}:`);  // Start from "Round 1"
-                playRound();
-                }
-
-                console.log("Game Over!");
-                if (humanScore > computerScore) {
-                    console.log("You won the game! 🎉");
-                } else if (humanScore < computerScore) {
-                    console.log("Computer won the game! 🤖");
-                } else {
-                    console.log("It's a tie! 😐");
-                }
-            }
-
-            playGame();
-
-        </script>
-    </body>
-
+        // Function to reset the game
+        function resetGame() {
+            humanScore = 0;
+            computerScore = 0;
+            
+            setTimeout(() => {
+                document.querySelector("#human-choice").textContent = "-";
+                document.querySelector("#computer-choice").textContent = "-";
+                document.querySelector("#round-result").textContent = "Let's Play!";
+                document.querySelector("#human-score").textContent = "0";
+                document.querySelector("#computer-score").textContent = "0";
+            }, 3000); // Reset after 3 seconds
+        }
+    </script>
+</body>
 </html>
